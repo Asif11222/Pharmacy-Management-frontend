@@ -31,9 +31,15 @@ export default function RegisterPage() {
       return;
     }
 
-    if (!/^\d{11}$/.test(form.phone)) {
+    if (!/^\d+$/.test(form.phone)) {
       setSuccess(false);
-      setMessage('Phone number must be exactly 11 digits');
+      setMessage('Phone number must contain numbers only');
+      return;
+    }
+
+    if (form.phone.length !== 11) {
+      setSuccess(false);
+      setMessage('Phone number must be 11 digits');
       return;
     }
 
@@ -89,7 +95,7 @@ export default function RegisterPage() {
               placeholder="Enter your full name"
               value={form.fullName}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -104,7 +110,7 @@ export default function RegisterPage() {
               placeholder="Enter your email"
               value={form.email}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -119,7 +125,7 @@ export default function RegisterPage() {
               placeholder="Enter your password"
               value={form.password}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -131,15 +137,23 @@ export default function RegisterPage() {
             <input
               name="phone"
               type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               placeholder="01700000000"
               value={form.phone}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (value === '' || /^\d*$/.test(value)) {
+                  handleChange(e);
+                }
+              }}
               maxLength={11}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
 
             <p className="text-xs text-gray-400 mt-1">
-              Phone number must be exactly 11 digits
+              
             </p>
           </div>
 

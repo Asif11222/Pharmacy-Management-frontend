@@ -26,14 +26,17 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const res = await API.post('/auth/login', form);
+      const res = await API.post('/auth/login', {
+        email: form.email.trim(),
+        password: form.password,
+      });
 
       localStorage.setItem('token', res.data.accessToken);
       localStorage.setItem('user', JSON.stringify(res.data.user));
 
       setMessage('Login successful');
 
-      router.push('/medicines');
+      router.push(res.data.user.role === 'admin' ? '/admin' : '/dashboard');
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.message || 'Login failed');
@@ -66,7 +69,7 @@ export default function LoginPage() {
               placeholder="Enter your email"
               value={form.email}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -80,9 +83,15 @@ export default function LoginPage() {
               placeholder="Enter your password"
               value={form.password}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
+
+             <p className="text-right text-sm">
+             <a href="/forgot-password" className="text-green-700 font-semibold">
+              Forgot password?
+              </a>
+               </p>
 
           <button
             type="submit"
